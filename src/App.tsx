@@ -28,7 +28,7 @@ import {
 } from "lucide-react";
 
 const RAZORPAY_LINK = "https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view";
-const SHARE_URL = window.location.href;
+const SHARE_URL = "https://clinicgrowthlanding-page.pages.dev";
 const SHARE_TEXT = "I found this amazing Patient Flow System for doctors by Dr. Prashant Kumar Vats. Check it out!";
 
 const SocialShare = () => {
@@ -144,12 +144,13 @@ const FloatingWhatsApp = () => (
     href={`https://wa.me/?text=${encodeURIComponent(SHARE_TEXT + " " + SHARE_URL)}`}
     target="_blank"
     rel="noopener noreferrer"
-    initial={{ x: 100, opacity: 0 }}
-    animate={{ x: 0, opacity: 1 }}
-    transition={{ delay: 1, duration: 0.8 }}
-    whileHover={{ scale: 1.1 }}
+    initial={{ scale: 0, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    transition={{ delay: 2, duration: 0.5, type: "spring" }}
+    whileHover={{ scale: 1.1, rotate: 5 }}
     whileTap={{ scale: 0.9 }}
-    className="fixed bottom-36 right-6 z-[101] bg-green-500 text-white p-4 rounded-full shadow-[0_20px_50px_rgba(34,197,94,0.4)] flex items-center justify-center border-2 border-white shadow-2xl hover:bg-green-600 transition-colors"
+    className="fixed bottom-32 right-6 z-[9999] bg-green-500 text-white p-4 rounded-full shadow-2xl flex items-center justify-center border-2 border-white cursor-pointer hover:bg-green-600 transition-colors"
+    aria-label="Share on WhatsApp"
   >
     <MessageCircle className="w-8 h-8" />
   </motion.a>
@@ -157,24 +158,23 @@ const FloatingWhatsApp = () => (
 
 const FloatingCTA = () => (
   <motion.div
-    initial={{ y: 200, opacity: 0 }}
+    initial={{ y: 100, opacity: 0 }}
     animate={{ y: 0, opacity: 1 }}
-    transition={{ delay: 1.5, duration: 1, ease: [0.21, 0.47, 0.32, 0.98] }}
-    className="fixed bottom-10 left-4 right-4 z-[100] md:max-w-xs md:left-6 md:right-auto"
+    transition={{ delay: 1.5, duration: 0.8, ease: "easeOut" }}
+    className="fixed bottom-6 left-4 right-4 md:left-auto md:right-32 md:w-80 z-[9998]"
   >
     <motion.a
       href={RAZORPAY_LINK}
-      whileHover={{ scale: 1.05, y: -5 }}
-      whileTap={{ scale: 0.95 }}
-      id="floating-cta"
-      className="flex items-center justify-between bg-orange-600 text-white py-4 px-6 rounded-3xl shadow-[0_20px_50px_rgba(249,115,22,0.4)] border border-white/20 backdrop-blur-lg"
+      whileHover={{ scale: 1.02, y: -2 }}
+      whileTap={{ scale: 0.98 }}
+      className="flex items-center justify-between bg-orange-600 text-white py-4 px-6 rounded-2xl shadow-2xl border border-white/20 backdrop-blur-md"
     >
       <div className="flex flex-col">
-        <span className="text-[10px] font-black opacity-80 uppercase tracking-widest leading-none mb-1">Join the System</span>
-        <span className="text-lg font-black leading-tight">Patients Flow @ ₹249</span>
+        <span className="text-[10px] font-black opacity-80 uppercase tracking-widest leading-none mb-1">Limited Offer</span>
+        <span className="text-base font-black leading-tight">Patient Flow System @ ₹249</span>
       </div>
-      <div className="bg-white/20 p-2 rounded-2xl ml-4">
-        <ArrowRight className="w-6 h-6" />
+      <div className="bg-white/20 p-2 rounded-xl">
+        <ArrowRight className="w-5 h-5" />
       </div>
     </motion.a>
   </motion.div>
@@ -183,8 +183,6 @@ const FloatingCTA = () => (
 export default function App() {
   return (
     <div className="min-h-screen bg-sky-50/50 font-sans text-slate-900 selection:bg-sky-100 selection:text-sky-900">
-      <FloatingCTA />
-      <FloatingWhatsApp />
       {/* Hero Section */}
       <section id="hero" className="relative pt-24 pb-32 md:pt-40 md:pb-48 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-sky-100 via-white to-sky-50 -z-10" />
@@ -967,6 +965,8 @@ export default function App() {
           <SocialShare />
         </div>
       </footer>
+      <FloatingCTA />
+      <FloatingWhatsApp />
     </div>
   );
 }
