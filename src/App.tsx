@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { 
   Users, 
   Layout,
@@ -182,6 +182,30 @@ const FloatingCTA = () => (
 );
 
 export default function App() {
+  const [hasError, setHasError] = React.useState(false);
+  const [errorInfo, setErrorInfo] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      setHasError(true);
+      setErrorInfo(event.message + "\n" + event.error?.stack);
+    };
+    window.addEventListener("error", handleError);
+    return () => window.removeEventListener("error", handleError);
+  }, []);
+
+  if (hasError) {
+    return (
+      <div className="p-10 flex flex-col items-center justify-center min-h-screen bg-red-50 text-red-900 font-sans">
+        <h1 className="text-3xl font-black mb-4">Something went wrong</h1>
+        <p className="mb-6 opacity-80 text-center max-w-lg">The application encountered a runtime error. Please refresh and try again or contact support.</p>
+        <pre className="p-6 bg-red-100 rounded-2xl w-full max-w-4xl overflow-auto text-xs border border-red-200">
+          {errorInfo}
+        </pre>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-sky-50/50 font-sans text-slate-900 selection:bg-sky-100 selection:text-sky-900">
       {/* Hero Section */}
