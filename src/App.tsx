@@ -4,7 +4,7 @@
  */
 
 import React from "react";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { 
   Users, 
   Layout,
@@ -114,8 +114,7 @@ const AnimatedText = ({ children, className = "", delay = 0, type = "fade-up" }:
   return (
     <motion.div
       initial={currentVariant.initial}
-      whileInView={currentVariant.animate}
-      viewport={{ once: true, margin: "-50px" }}
+      animate={currentVariant.animate}
       transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={className}
     >
