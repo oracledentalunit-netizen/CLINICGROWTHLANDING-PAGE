@@ -109,10 +109,12 @@ const AnimatedText = ({ children, className = "", delay = 0, type = "fade-up" }:
     "scale-up": { initial: { opacity: 0, scale: 0.9 }, animate: { opacity: 1, scale: 1 } }
   };
 
+  const currentVariant = variants[type] || variants["fade-up"];
+
   return (
     <motion.div
-      initial={variants[type].initial}
-      whileInView={variants[type].animate}
+      initial={currentVariant.initial}
+      whileInView={currentVariant.animate}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.8, delay, ease: [0.21, 0.47, 0.32, 0.98] }}
       className={className}
@@ -286,7 +288,6 @@ export default function App() {
                   src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800"
                   alt="Empty Clinic - Sad Dentist"
                   className="rounded-3xl shadow-2xl w-full aspect-[4/5] object-cover will-change-transform"
-                  fetchPriority="high"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest shadow-lg">
