@@ -1,14 +1,641 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Flow System | Dr. Prashant Kumar Vats</title>
-    <meta name="description" content="Unlock a predictable patient flow for your clinic with the proven system by Dr. Prashant Kumar Vats." />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+    <meta name="description" content="Unlock a predictable patient flow for your clinic with the proven system by Dr. Prashant Kumar Vats.">
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --secondary: #ea580c;
+            --secondary-dark: #c2410c;
+            --bg-light: #f0f9ff;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        a {
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        section {
+            padding: 4rem 0;
+        }
+
+        h1, h2, h3, h4 {
+            line-height: 1.1;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-weight: 800;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 25px -5px rgba(234, 88, 12, 0.2);
+        }
+
+        .btn-xl {
+            padding: 1.25rem 2.5rem;
+            font-size: 1.25rem;
+        }
+
+        /* Layout Grid */
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+            section { padding: 6rem 0; }
+        }
+
+        /* Hero */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 span {
+            color: var(--secondary);
+            position: relative;
+        }
+
+        .hero h1 span::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: #ffedd5;
+            z-index: -1;
+            border-radius: 4px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-img {
+            width: 100%;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            aspect-ratio: 4/5;
+            object-fit: cover;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary-dark);
+            margin-bottom: 2rem;
+            border: 1px solid #bae6fd;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .feature-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        /* Sections */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            border-color: #bae6fd;
+        }
+
+        .problem-card {
+            background: #f8fafc;
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .problem-card span {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        /* Comparison */
+        .comparison-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .comparison-item {
+            padding: 2rem;
+            border-radius: 2.5rem;
+        }
+
+        .comparison-bad {
+            background: #f1f5f9;
+            color: var(--text-muted);
+        }
+
+        .comparison-bad li {
+            text-decoration: line-through;
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .comparison-good {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 20px 25px -5px rgba(2, 132, 199, 0.3);
+        }
+
+        .comparison-good h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-good li {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Mission */
+        .mission {
+            background: #f8fafc;
+        }
+        
+        .mission-quote {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 2rem;
+            border-left: 8px solid var(--primary);
+            font-weight: 900;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin: 2rem 0;
+        }
+
+        /* Solution Grid */
+        .solution-card {
+            text-align: center;
+        }
+
+        .solution-card .icon-wrap {
+            width: 5rem;
+            height: 5rem;
+            background: var(--bg-light);
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Offer Sack */
+        .offer-stack {
+            background: white;
+            border-radius: 3rem;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+
+        .offer-content {
+            padding: 2.5rem;
+        }
+
+        .offer-sidebar {
+            background: var(--primary);
+            color: white;
+            padding: 3rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .price-old {
+            text-decoration: line-through;
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-new {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+
+        /* Sticky Bottom */
+        .sticky-cta {
+            position: fixed;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            z-index: 100;
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        @media (min-width: 768px) {
+            .offer-stack {
+                display: grid;
+                grid-template-columns: 1fr 340px;
+            }
+            .sticky-cta {
+                display: none;
+            }
+            .hero h1 { font-size: 4.5rem; }
+            .grid-cols-2 { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* Utilities */
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-8 { margin-top: 2rem; }
+        .text-center { text-align: center; }
+        .uppercase { text-transform: uppercase; }
+        .font-black { font-weight: 900; }
+
+        svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container grid grid-2" style="align-items: center;">
+            <div>
+                <div class="hero-badge">
+                    <span style="width:8px; height:8px; border-radius:50%; background:var(--primary); display:inline-block; margin-right:8px; animation: pulse 2s infinite;"></span>
+                    Trusted by 5,000+ Doctors Worldwide
+                </div>
+                <h1>Patients <span>nahi aa rahe?</span></h1>
+                <p>Ab har season me consistent patient flow possible hai. System unlock kariye jo har din nayi bookings dilayega.</p>
+                
+                <div class="mb-8">
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg style="color:var(--primary)"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M16 14v6m-4-7 4 4 4-4"/></svg></div>
+                        <span>Rain ho ya summer — patients aate rahenge</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg style="color:#22c55e"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                        <span>Small town ya metro city — system same kaam karega</span>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon"><svg style="color:var(--secondary)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                        <span>Chair khali nahi rahegi</span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary btn-xl">Mujhe Patients Chahiye</a>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="color: #94a3b8; text-decoration: line-through; font-size: 0.9rem; font-weight: 800;">Value ₹25,000+</span>
+                        <span style="font-size: 1.5rem; font-weight: 900;">Sirf ₹249 Today</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800" alt="Clinic" class="hero-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section>
+        <div class="container">
+            <div class="section-title" style="text-align: left;">
+                <h2>Kya Aap Bhi Ye <span style="color: var(--primary); text-decoration: underline;">Face Kar Rahe Hain?</span></h2>
+            </div>
+            <div class="grid grid-2" style="align-items: center;">
+                <div class="grid" style="gap: 1.5rem;">
+                    <div class="card problem-card">
+                        <svg style="color: #ef4444; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>Clinic me khaali time zyada hai</span>
+                    </div>
+                    <div class="card problem-card">
+                        <svg style="color: #ef4444; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>Patients irregular aate hain</span>
+                    </div>
+                    <div class="card problem-card">
+                        <svg style="color: #ef4444; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>Ads kaam nahi kar rahe (Paisa barbaad)</span>
+                    </div>
+                    
+                    <div class="mission-quote" style="background: var(--secondary); color: white; border: none;">
+                        “Problem marketing ki nahi — system ki hai”
+                    </div>
+                    
+                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary">Solve This Problem Now</a>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800" alt="Waiting Area" style="width:100%; border-radius: 2.5rem; aspect-ratio: 1; object-fit:cover;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section style="background: white;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Market <span style="color: var(--primary);">Reality vs. Our System</span></h2>
+                <p>Agencies will charge you thousands but leave you confused. We give you the keys to the kingdom.</p>
+            </div>
+            <div class="grid grid-2">
+                <div class="comparison-item comparison-bad">
+                    <h3 class="mb-8" style="text-align: center; color: #94a3b8;">TYPICAL AGENCIES</h3>
+                    <ul>
+                        <li><span>✕</span> Templates deti hain, use kaise kare nahi batati</li>
+                        <li><span>✕</span> Training ke liye ₹20k–₹50k extra charge</li>
+                        <li><span>✕</span> Aapko hamesha dependent rakhti hain</li>
+                        <li><span>✕</span> Zero guarantee results</li>
+                    </ul>
+                </div>
+                <div class="comparison-item comparison-good">
+                    <h3>YAHAN AAPKO KYA MILEGA?</h3>
+                    <ul>
+                        <li><svg><polyline points="20 6 9 17 4 12"/></svg> High-Converting Ready-to-use Templates</li>
+                        <li><svg><polyline points="20 6 9 17 4 12"/></svg> Step-by-step Training (Usage Guide)</li>
+                        <li><svg><polyline points="20 6 9 17 4 12"/></svg> Total Self-Dependency (No Agency Fees)</li>
+                        <li><svg><polyline points="20 6 9 17 4 12"/></svg> Pura Predictable Ecosystem</li>
+                    </ul>
+                    <div class="mt-8 pt-8" style="border-top: 1px solid rgba(255,255,255,0.2);">
+                        <p style="font-style: italic; text-align: center; font-weight: 700;">“Your road to complete freedom”</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our <span style="color: var(--primary);">Core Mission</span></h2>
+                <p>Helping doctors earn what they truly deserve.</p>
+            </div>
+            <div class="grid grid-2" style="align-items: center;">
+                <div>
+                  <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 1.5rem;">Doctors highly skilled hote hain, lekin apna focus marketing pe nahi de paate, isliye earnings skill ke hisaab se nahi hoti.</p>
+                  <div class="mission-quote">
+                    "Is system ka goal hai Doctors ko empower karna — taaki wo apni skill ke hisaab se earn sakein."
+                  </div>
+                  <p style="font-size: 1.25rem; font-weight: 700;">Yeh sirf ek product nahi — ek initiative hai.</p>
+                  <div class="mt-8">
+                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary btn-xl">Join the Initiative</a>
+                  </div>
+                </div>
+                <div>
+                    <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=800" alt="Doctor" style="width:100%; border-radius: 3rem; border: 8px solid white; box-shadow: var(--shadow);">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section>
+        <div class="container">
+            <div class="section-title">
+                <h2>Introducing The <span style="color: var(--primary);">Growth Engine</span></h2>
+            </div>
+            <div class="grid grid-3">
+                <div class="card solution-card">
+                    <div class="icon-wrap"><svg><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+                    <h3 class="mb-4">Copy-Paste Ads</h3>
+                    <p>Ready to use designs that work instantly for high conversions.</p>
+                </div>
+                <div class="card solution-card">
+                    <div class="icon-wrap"><svg><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                    <h3 class="mb-4">WhatsApp Scripts</h3>
+                    <p>Scripts that turn regular inquiries into confirmed walk-ins.</p>
+                </div>
+                <div class="card solution-card">
+                    <div class="icon-wrap"><svg><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+                    <h3 class="mb-4">Predictable Flow</h3>
+                    <p>Fill your chair even in off-seasons. No more dry months.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Offer Stack -->
+    <section>
+        <div class="container">
+            <div class="offer-stack">
+                <div class="offer-content">
+                    <h3 class="mb-8" style="font-size: 1.5rem; text-transform: uppercase; color: var(--primary); border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem;">Complete Growth Stack</h3>
+                    <div class="grid" style="gap: 1rem;">
+                        <div style="display: flex; gap: 1rem;">
+                            <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
+                            <div><strong>Ad Templates</strong> - Ready Meta & Google hooks</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
+                            <div><strong>WhatsApp Scripts</strong> - Conversion focused</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
+                            <div><strong>Landing Page Designs</strong> - Optimized for clinics</div>
+                        </div>
+                        <div style="display: flex; gap: 1rem;">
+                            <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
+                            <div><strong>Step-by-step System</strong> - Launch in 48 hours</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="offer-sidebar">
+                    <div class="price-old">Value ₹50,000+</div>
+                    <div class="price-new">₹249</div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem; margin-bottom: 2rem;">One-Time Offer</div>
+                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary" style="background: white; color: var(--secondary);">Access Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Masterclass -->
+     <section style="background: #f8fafc;">
+        <div class="container grid grid-2" style="align-items: center;">
+            <div>
+                <h2>The <span style="color: var(--primary);">Masterclass</span></h2>
+                <p class="mb-8">Single powerful session to tie all tools together.</p>
+                <div class="grid" style="gap: 1rem; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; gap:0.5rem;">
+                        <svg style="color: var(--primary);"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                        <span>Low budget patients strategy</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap:0.5rem;">
+                        <svg style="color: var(--primary);"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                        <span>WhatsApp booking conversion</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap:0.5rem;">
+                        <svg style="color: var(--primary);"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                        <span>Meta Ads setup (No agency)</span>
+                    </div>
+                </div>
+                <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary">Register for ₹249</a>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=1200" alt="Doctor" style="width:100%; border-radius: 2rem; border: 8px solid white;">
+            </div>
+        </div>
+     </section>
+
+    <!-- Footer -->
+    <footer style="background: #0f172a; color: white; padding: 4rem 0; text-align: center;">
+        <div class="container">
+            <h2 style="margin-bottom: 1rem;">Patient Flow System</h2>
+            <p style="opacity: 0.6;">&copy; 2026 Dr. Prashant Kumar Vats. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Sticky Bottom Mobile CTA -->
+    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="sticky-cta">
+        <div>
+            <div style="font-size: 0.6rem; text-transform: uppercase; font-weight: 900; opacity: 0.8;">Limited Offer</div>
+            <div style="font-weight: 900; font-size: 1.1rem;">Full System @ ₹249</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.5rem;">
+            <svg><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
+        </div>
+    </a>
+
+    <style>
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(2, 132, 199, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
+        }
+    </style>
+
+</body>
+</html>
