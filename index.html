@@ -7,17 +7,24 @@
     <meta name="description" content="Unlock a predictable patient flow for your clinic with the proven system by Dr. Prashant Kumar Vats.">
     <style>
         :root {
-            --primary: #0284c7;
-            --primary-dark: #0369a1;
-            --secondary: #ea580c;
-            --secondary-dark: #c2410c;
-            --bg-light: #f0f9ff;
+            --primary: #0ea5e9;
+            --primary-dark: #0284c7;
+            --primary-soft: #e0f2fe;
+            --secondary: #f97316;
+            --secondary-dark: #ea580c;
+            --secondary-soft: #ffedd5;
+            --accent: #8b5cf6;
+            --bg-light: #f8fafc;
             --text-dark: #0f172a;
-            --text-muted: #475569;
+            --text-muted: #64748b;
             --white: #ffffff;
             --border: #e2e8f0;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+            --glass: rgba(255, 255, 255, 0.7);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         * {
@@ -26,38 +33,46 @@
             box-sizing: border-box;
         }
 
+        @scroll-behavior: smooth;
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: var(--font-sans);
             color: var(--text-dark);
-            background-color: var(--bg-light);
+            background-color: var(--white);
             line-height: 1.6;
             overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
             width: 100%;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 1.5rem;
         }
 
         a {
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        ul {
-            list-style: none;
-        }
+        ul { list-style: none; }
 
-        section {
-            padding: 4rem 0;
-        }
+        section { padding: 5rem 0; overflow: hidden; }
 
         h1, h2, h3, h4 {
             line-height: 1.1;
-            font-weight: 900;
-            letter-spacing: -0.02em;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: #0f172a;
+        }
+
+        /* Better Typography for Premium Look */
+        .text-gradient {
+            background: linear-gradient(135deg, var(--text-dark) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Buttons */
@@ -65,31 +80,82 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem 2rem;
-            border-radius: 9999px;
-            font-weight: 800;
+            padding: 1rem 2.5rem;
+            border-radius: 1rem;
+            font-weight: 700;
             cursor: pointer;
             text-align: center;
             border: none;
             font-size: 1.1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.2);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .btn:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
         }
 
         .btn-primary {
-            background-color: var(--secondary);
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
             color: var(--white);
         }
 
         .btn-primary:hover {
-            background-color: var(--secondary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 20px 25px -5px rgba(234, 88, 12, 0.2);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(249, 115, 22, 0.4);
         }
 
         .btn-xl {
-            padding: 1.25rem 2.5rem;
+            padding: 1.5rem 3rem;
             font-size: 1.25rem;
         }
+
+        /* Animations classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.8s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.8s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+        }
+
+        .reveal-left.active, .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
 
         /* Layout Grid */
         .grid {
@@ -100,74 +166,93 @@
         @media (min-width: 768px) {
             .grid-2 { grid-template-columns: 1fr 1fr; }
             .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
-            section { padding: 6rem 0; }
+            section { padding: 8rem 0; }
         }
 
         /* Hero */
         .hero {
             position: relative;
-            background: linear-gradient(135deg, #e0f2fe 0%, #ffffff 100%);
-            padding-top: 5rem;
-            padding-bottom: 5rem;
+            background: radial-gradient(circle at top right, var(--primary-soft) 0%, #ffffff 60%);
+            padding-top: 6rem;
+            padding-bottom: 6rem;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
         }
 
         .hero h1 {
             font-size: 3.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            line-height: 1;
         }
 
         .hero h1 span {
             color: var(--secondary);
             position: relative;
+            z-index: 1;
         }
 
         .hero h1 span::after {
             content: '';
             position: absolute;
-            bottom: 4px;
+            bottom: 8px;
             left: 0;
             width: 100%;
-            height: 8px;
-            background: #ffedd5;
+            height: 12px;
+            background: var(--secondary-soft);
             z-index: -1;
             border-radius: 4px;
+            opacity: 0.7;
         }
 
         .hero p {
             font-size: 1.25rem;
             color: var(--text-muted);
-            margin-bottom: 2rem;
-            max-width: 600px;
+            margin-bottom: 2.5rem;
+            max-width: 550px;
+        }
+
+        .hero-img-container {
+            position: relative;
+            perspective: 1000px;
         }
 
         .hero-img {
             width: 100%;
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 2.5rem;
+            box-shadow: var(--shadow-xl);
             aspect-ratio: 4/5;
             object-fit: cover;
+            transform: rotate3d(1, -1, 0, 8deg);
+            transition: transform 0.6s ease;
+        }
+
+        .hero-img:hover {
+            transform: rotate3d(0, 0, 0, 0deg);
         }
 
         .hero-badge {
             display: inline-flex;
-            background: white;
-            padding: 0.5rem 1rem;
+            align-items: center;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            padding: 0.6rem 1.2rem;
             border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 900;
+            font-size: 0.8rem;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
             color: var(--primary-dark);
-            margin-bottom: 2rem;
-            border: 1px solid #bae6fd;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--primary-soft);
+            box-shadow: var(--shadow-sm);
         }
 
         .feature-item {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
             font-weight: 700;
             font-size: 1.1rem;
         }
@@ -176,212 +261,272 @@
             width: 2.5rem;
             height: 2.5rem;
             background: white;
-            border-radius: 0.75rem;
+            border-radius: 0.8rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-sm);
+            color: var(--primary);
+            flex-shrink: 0;
         }
 
         /* Sections */
         .section-title {
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 4.5rem;
         }
 
         .section-title h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
         }
 
         .section-title p {
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .card {
             background: white;
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 2rem;
             border: 1px solid var(--border);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow);
-            border-color: #bae6fd;
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-soft);
         }
 
         .problem-card {
-            background: #f8fafc;
+            background: linear-gradient(to right, #f8fafc, #ffffff);
             display: flex;
             gap: 1.5rem;
-            padding: 1.5rem;
+            padding: 2rem;
+            align-items: center;
         }
 
         .problem-card span {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 700;
         }
 
         /* Comparison */
-        .comparison-grid {
-            display: grid;
-            gap: 2rem;
-        }
-
         .comparison-item {
-            padding: 2rem;
+            padding: 3rem;
             border-radius: 2.5rem;
+            position: relative;
+            overflow: hidden;
         }
 
         .comparison-bad {
             background: #f1f5f9;
             color: var(--text-muted);
+            border: 1px solid var(--border);
         }
 
         .comparison-bad li {
             text-decoration: line-through;
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             display: flex;
-            gap: 0.5rem;
+            gap: 1rem;
+            opacity: 0.7;
         }
 
         .comparison-good {
             background: var(--primary);
             color: white;
-            box-shadow: 0 20px 25px -5px rgba(2, 132, 199, 0.3);
+            box-shadow: 0 30px 40px -10px rgba(14, 165, 233, 0.3);
         }
 
         .comparison-good h3 {
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: white;
         }
 
         .comparison-good li {
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
             display: flex;
             gap: 1rem;
-            font-size: 1.1rem;
-            font-weight: 500;
+            font-size: 1.15rem;
+            font-weight: 600;
         }
 
         /* Mission */
         .mission {
-            background: #f8fafc;
+            background: linear-gradient(to bottom, #f8fafc, #ffffff);
         }
         
         .mission-quote {
             background: white;
-            padding: 2.5rem;
-            border-radius: 2rem;
-            border-left: 8px solid var(--primary);
-            font-weight: 900;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            margin: 2rem 0;
+            padding: 3rem;
+            border-radius: 2.5rem;
+            border-left: 12px solid var(--primary);
+            font-weight: 800;
+            font-size: 1.75rem;
+            box-shadow: var(--shadow-lg);
+            margin: 3rem 0;
+            font-style: italic;
         }
 
         /* Solution Grid */
         .solution-card {
-            text-align: center;
+            text-align: left;
         }
 
         .solution-card .icon-wrap {
-            width: 5rem;
-            height: 5rem;
-            background: var(--bg-light);
-            border-radius: 1.5rem;
+            width: 4.5rem;
+            height: 4.5rem;
+            background: var(--primary-soft);
+            border-radius: 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
+            margin-bottom: 1.5rem;
             color: var(--primary);
         }
 
-        /* Offer Sack */
+        /* Offer Stack */
         .offer-stack {
             background: white;
             border-radius: 3rem;
             overflow: hidden;
             border: 1px solid var(--border);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-xl);
+            display: grid;
         }
 
         .offer-content {
-            padding: 2.5rem;
+            padding: 4rem;
         }
 
         .offer-sidebar {
-            background: var(--primary);
+            background: #0f172a;
             color: white;
-            padding: 3rem;
+            padding: 4rem;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            position: relative;
+        }
+
+        .offer-sidebar::before {
+            content: '';
+            position: absolute;
+            top: -20%; right: -20%; width: 60%; height: 60%;
+            background: var(--primary);
+            filter: blur(100px);
+            opacity: 0.2;
+            pointer-events: none;
         }
 
         .price-old {
             text-decoration: line-through;
-            opacity: 0.6;
+            opacity: 0.5;
             margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 1.2rem;
         }
 
         .price-new {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: 900;
             margin-bottom: 1rem;
+            line-height: 1;
+            background: linear-gradient(to bottom, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Sticky Bottom */
-        .sticky-cta {
+        /* Floating CTA */
+        .floating-cta {
             position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            right: 1rem;
-            z-index: 100;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
             background: var(--secondary);
             color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 1rem;
+            padding: 1.2rem 2rem;
+            border-radius: 9999px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255,255,255,0.2);
+            gap: 1rem;
+            box-shadow: 0 20px 40px -10px rgba(249, 115, 22, 0.5);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transform: translateY(120px);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1.5px solid rgba(255,255,255,0.2);
+        }
+
+        .floating-cta.visible {
+            transform: translateY(0);
+        }
+
+        .floating-cta svg {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .floating-cta {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                justify-content: center;
+                padding: 1rem;
+            }
+            .hero-img {
+                margin-top: 3rem;
+                transform: none;
+            }
+            .hero h1 { font-size: 2.8rem; }
+            .section-title h2 { font-size: 2.2rem; }
         }
 
         @media (min-width: 768px) {
             .offer-stack {
-                display: grid;
-                grid-template-columns: 1fr 340px;
+                grid-template-columns: 1fr 400px;
             }
-            .sticky-cta {
-                display: none;
-            }
-            .hero h1 { font-size: 4.5rem; }
-            .grid-cols-2 { grid-template-columns: 1fr 1fr; }
+            .hero h1 { font-size: 4.8rem; }
         }
 
-        /* Utilities */
-        .mb-2 { margin-bottom: 0.5rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .mb-8 { margin-bottom: 2rem; }
-        .mt-8 { margin-top: 2rem; }
-        .text-center { text-align: center; }
-        .uppercase { text-transform: uppercase; }
-        .font-black { font-weight: 900; }
+        /* Pulsing Dot */
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            margin-right: 12px;
+            position: relative;
+        }
+
+        .dot::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #22c55e;
+            border-radius: 50%;
+            animation: dot-pulse 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+
+        @keyframes dot-pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3.5); opacity: 0; }
+        }
 
         svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            fill: none;
             stroke: currentColor;
             stroke-width: 2.5;
+            fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
@@ -392,38 +537,38 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container grid grid-2" style="align-items: center;">
-            <div>
-                <div class="hero-badge">
-                    <span style="width:8px; height:8px; border-radius:50%; background:var(--primary); display:inline-block; margin-right:8px; animation: pulse 2s infinite;"></span>
+            <div class="reveal-left active">
+                <div class="hero-badge reveal stagger-1">
+                    <div class="dot"></div>
                     Trusted by 5,000+ Doctors Worldwide
                 </div>
-                <h1>Patients <span>nahi aa rahe?</span></h1>
-                <p>Ab har season me consistent patient flow possible hai. System unlock kariye jo har din nayi bookings dilayega.</p>
+                <h1 class="reveal stagger-2">Patients <span class="text-gradient">nahi aa rahe?</span></h1>
+                <p class="reveal stagger-3">Ab har season me consistent patient flow possible hai. System unlock kariye jo har din nayi bookings dilayega.</p>
                 
                 <div class="mb-8">
-                    <div class="feature-item">
-                        <div class="feature-icon"><svg style="color:var(--primary)"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M16 14v6m-4-7 4 4 4-4"/></svg></div>
+                    <div class="feature-item reveal stagger-4">
+                        <div class="feature-icon"><svg><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242M16 14v6m-4-7 4 4 4-4"/></svg></div>
                         <span>Rain ho ya summer — patients aate rahenge</span>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item reveal stagger-4">
                         <div class="feature-icon"><svg style="color:#22c55e"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></div>
                         <span>Small town ya metro city — system same kaam karega</span>
                     </div>
-                    <div class="feature-item">
+                    <div class="feature-item reveal stagger-4">
                         <div class="feature-icon"><svg style="color:var(--secondary)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                         <span>Chair khali nahi rahegi</span>
                     </div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="reveal stagger-4" style="display: flex; flex-direction: column; gap: 1rem;">
                     <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary btn-xl">Mujhe Patients Chahiye</a>
                     <div style="display: flex; flex-direction: column;">
                         <span style="color: #94a3b8; text-decoration: line-through; font-size: 0.9rem; font-weight: 800;">Value ₹25,000+</span>
-                        <span style="font-size: 1.5rem; font-weight: 900;">Sirf ₹249 Today</span>
+                        <span class="text-gradient" style="font-size: 1.5rem; font-weight: 900;">Sirf ₹249 Today</span>
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="hero-img-container reveal-right active">
                 <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80&w=800" alt="Clinic" class="hero-img">
             </div>
         </div>
@@ -432,31 +577,33 @@
     <!-- Problem Section -->
     <section>
         <div class="container">
-            <div class="section-title" style="text-align: left;">
+            <div class="section-title reveal" style="text-align: left;">
                 <h2>Kya Aap Bhi Ye <span style="color: var(--primary); text-decoration: underline;">Face Kar Rahe Hain?</span></h2>
             </div>
             <div class="grid grid-2" style="align-items: center;">
                 <div class="grid" style="gap: 1.5rem;">
-                    <div class="card problem-card">
+                    <div class="card problem-card reveal-left stagger-1">
                         <svg style="color: #ef4444; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                         <span>Clinic me khaali time zyada hai</span>
                     </div>
-                    <div class="card problem-card">
+                    <div class="card problem-card reveal-left stagger-2">
                         <svg style="color: #ef4444; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                         <span>Patients irregular aate hain</span>
                     </div>
-                    <div class="card problem-card">
+                    <div class="card problem-card reveal-left stagger-3">
                         <svg style="color: #ef4444; flex-shrink:0;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                         <span>Ads kaam nahi kar rahe (Paisa barbaad)</span>
                     </div>
                     
-                    <div class="mission-quote" style="background: var(--secondary); color: white; border: none;">
+                    <div class="mission-quote reveal stagger-4" style="background: var(--secondary); color: white; border: none;">
                         “Problem marketing ki nahi — system ki hai”
                     </div>
                     
-                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary">Solve This Problem Now</a>
+                    <div class="reveal stagger-4">
+                        <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary">Solve This Problem Now</a>
+                    </div>
                 </div>
-                <div>
+                <div class="reveal-right">
                     <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800" alt="Waiting Area" style="width:100%; border-radius: 2.5rem; aspect-ratio: 1; object-fit:cover;">
                 </div>
             </div>
@@ -466,12 +613,12 @@
     <!-- Comparison Section -->
     <section style="background: white;">
         <div class="container">
-            <div class="section-title">
-                <h2>Market <span style="color: var(--primary);">Reality vs. Our System</span></h2>
+            <div class="section-title reveal">
+                <h2>Market <span class="text-gradient">Reality vs. Our System</span></h2>
                 <p>Agencies will charge you thousands but leave you confused. We give you the keys to the kingdom.</p>
             </div>
             <div class="grid grid-2">
-                <div class="comparison-item comparison-bad">
+                <div class="comparison-item comparison-bad reveal-left">
                     <h3 class="mb-8" style="text-align: center; color: #94a3b8;">TYPICAL AGENCIES</h3>
                     <ul>
                         <li><span>✕</span> Templates deti hain, use kaise kare nahi batati</li>
@@ -480,7 +627,7 @@
                         <li><span>✕</span> Zero guarantee results</li>
                     </ul>
                 </div>
-                <div class="comparison-item comparison-good">
+                <div class="comparison-item comparison-good reveal-right">
                     <h3>YAHAN AAPKO KYA MILEGA?</h3>
                     <ul>
                         <li><svg><polyline points="20 6 9 17 4 12"/></svg> High-Converting Ready-to-use Templates</li>
@@ -488,7 +635,7 @@
                         <li><svg><polyline points="20 6 9 17 4 12"/></svg> Total Self-Dependency (No Agency Fees)</li>
                         <li><svg><polyline points="20 6 9 17 4 12"/></svg> Pura Predictable Ecosystem</li>
                     </ul>
-                    <div class="mt-8 pt-8" style="border-top: 1px solid rgba(255,255,255,0.2);">
+                    <div class="mt-8 pt-8 reveal stagger-2" style="border-top: 1px solid rgba(255,255,255,0.2);">
                         <p style="font-style: italic; text-align: center; font-weight: 700;">“Your road to complete freedom”</p>
                     </div>
                 </div>
@@ -499,22 +646,22 @@
     <!-- Mission Section -->
     <section class="mission">
         <div class="container">
-            <div class="section-title">
-                <h2>Our <span style="color: var(--primary);">Core Mission</span></h2>
+            <div class="section-title reveal">
+                <h2>Our <span class="text-gradient">Core Mission</span></h2>
                 <p>Helping doctors earn what they truly deserve.</p>
             </div>
             <div class="grid grid-2" style="align-items: center;">
-                <div>
+                <div class="reveal-left">
                   <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 1.5rem;">Doctors highly skilled hote hain, lekin apna focus marketing pe nahi de paate, isliye earnings skill ke hisaab se nahi hoti.</p>
-                  <div class="mission-quote">
+                  <div class="mission-quote reveal">
                     "Is system ka goal hai Doctors ko empower karna — taaki wo apni skill ke hisaab se earn sakein."
                   </div>
-                  <p style="font-size: 1.25rem; font-weight: 700;">Yeh sirf ek product nahi — ek initiative hai.</p>
-                  <div class="mt-8">
+                  <p class="reveal stagger-1" style="font-size: 1.25rem; font-weight: 700;">Yeh sirf ek product nahi — ek initiative hai.</p>
+                  <div class="mt-8 reveal stagger-2">
                     <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary btn-xl">Join the Initiative</a>
                   </div>
                 </div>
-                <div>
+                <div class="reveal-right">
                     <img src="https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=800" alt="Doctor" style="width:100%; border-radius: 3rem; border: 8px solid white; box-shadow: var(--shadow);">
                 </div>
             </div>
@@ -524,21 +671,21 @@
     <!-- Solution Section -->
     <section>
         <div class="container">
-            <div class="section-title">
-                <h2>Introducing The <span style="color: var(--primary);">Growth Engine</span></h2>
+            <div class="section-title reveal">
+                <h2>Introducing The <span class="text-gradient">Growth Engine</span></h2>
             </div>
             <div class="grid grid-3">
-                <div class="card solution-card">
+                <div class="card solution-card reveal stagger-1">
                     <div class="icon-wrap"><svg><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
                     <h3 class="mb-4">Copy-Paste Ads</h3>
                     <p>Ready to use designs that work instantly for high conversions.</p>
                 </div>
-                <div class="card solution-card">
+                <div class="card solution-card reveal stagger-2">
                     <div class="icon-wrap"><svg><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
                     <h3 class="mb-4">WhatsApp Scripts</h3>
                     <p>Scripts that turn regular inquiries into confirmed walk-ins.</p>
                 </div>
-                <div class="card solution-card">
+                <div class="card solution-card reveal stagger-3">
                     <div class="icon-wrap"><svg><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
                     <h3 class="mb-4">Predictable Flow</h3>
                     <p>Fill your chair even in off-seasons. No more dry months.</p>
@@ -550,33 +697,33 @@
     <!-- Offer Stack -->
     <section>
         <div class="container">
-            <div class="offer-stack">
+            <div class="offer-stack reveal">
                 <div class="offer-content">
-                    <h3 class="mb-8" style="font-size: 1.5rem; text-transform: uppercase; color: var(--primary); border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem;">Complete Growth Stack</h3>
+                    <h3 class="mb-8 reveal stagger-1" style="font-size: 1.5rem; text-transform: uppercase; color: var(--primary); border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem;">Complete Growth Stack</h3>
                     <div class="grid" style="gap: 1rem;">
-                        <div style="display: flex; gap: 1rem;">
+                        <div class="reveal stagger-2" style="display: flex; gap: 1rem;">
                             <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
                             <div><strong>Ad Templates</strong> - Ready Meta & Google hooks</div>
                         </div>
-                        <div style="display: flex; gap: 1rem;">
+                        <div class="reveal stagger-3" style="display: flex; gap: 1rem;">
                             <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
                             <div><strong>WhatsApp Scripts</strong> - Conversion focused</div>
                         </div>
-                        <div style="display: flex; gap: 1rem;">
+                        <div class="reveal stagger-4" style="display: flex; gap: 1rem;">
                             <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
                             <div><strong>Landing Page Designs</strong> - Optimized for clinics</div>
                         </div>
-                        <div style="display: flex; gap: 1rem;">
+                        <div class="reveal stagger-4" style="display: flex; gap: 1rem;">
                             <svg style="color: #22c55e;"><polyline points="20 6 9 17 4 12"/></svg>
                             <div><strong>Step-by-step System</strong> - Launch in 48 hours</div>
                         </div>
                     </div>
                 </div>
-                <div class="offer-sidebar">
+                <div class="offer-sidebar reveal-right">
                     <div class="price-old">Value ₹50,000+</div>
                     <div class="price-new">₹249</div>
-                    <div style="background: rgba(255,255,255,0.1); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem; margin-bottom: 2rem;">One-Time Offer</div>
-                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary" style="background: white; color: var(--secondary);">Access Now</a>
+                    <div class="reveal stagger-3" style="background: rgba(255,255,255,0.1); padding: 0.5rem; border-radius: 0.5rem; font-size: 0.8rem; margin-bottom: 2rem;">One-Time Offer</div>
+                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary reveal stagger-4" style="background: white; color: var(--secondary);">Access Now</a>
                 </div>
             </div>
         </div>
@@ -585,26 +732,28 @@
     <!-- Masterclass -->
      <section style="background: #f8fafc;">
         <div class="container grid grid-2" style="align-items: center;">
-            <div>
-                <h2>The <span style="color: var(--primary);">Masterclass</span></h2>
+            <div class="reveal-left">
+                <h2>The <span class="text-gradient">Masterclass</span></h2>
                 <p class="mb-8">Single powerful session to tie all tools together.</p>
                 <div class="grid" style="gap: 1rem; margin-bottom: 2rem;">
-                    <div style="display: flex; align-items: center; gap:0.5rem;">
+                    <div class="reveal stagger-1" style="display: flex; align-items: center; gap:0.5rem;">
                         <svg style="color: var(--primary);"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
                         <span>Low budget patients strategy</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap:0.5rem;">
+                    <div class="reveal stagger-2" style="display: flex; align-items: center; gap:0.5rem;">
                         <svg style="color: var(--primary);"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
                         <span>WhatsApp booking conversion</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap:0.5rem;">
+                    <div class="reveal stagger-3" style="display: flex; align-items: center; gap:0.5rem;">
                         <svg style="color: var(--primary);"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
                         <span>Meta Ads setup (No agency)</span>
                     </div>
                 </div>
-                <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary">Register for ₹249</a>
+                <div class="reveal stagger-4">
+                    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="btn btn-primary">Register for ₹249</a>
+                </div>
             </div>
-            <div>
+            <div class="reveal-right">
                 <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&q=80&w=1200" alt="Doctor" style="width:100%; border-radius: 2rem; border: 8px solid white;">
             </div>
         </div>
@@ -618,24 +767,40 @@
         </div>
     </footer>
 
-    <!-- Sticky Bottom Mobile CTA -->
-    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="sticky-cta">
-        <div>
-            <div style="font-size: 0.6rem; text-transform: uppercase; font-weight: 900; opacity: 0.8;">Limited Offer</div>
-            <div style="font-weight: 900; font-size: 1.1rem;">Full System @ ₹249</div>
-        </div>
-        <div style="background: rgba(255,255,255,0.2); padding: 0.5rem; border-radius: 0.5rem;">
-            <svg><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg>
-        </div>
+    <!-- Floating CTA -->
+    <a href="https://pages.razorpay.com/pl_SlCldEoS8GtlOB/view" class="floating-cta" id="floatingCta">
+        <span>Get Full System Only ₹249</span>
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
 
-    <style>
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(2, 132, 199, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(2, 132, 199, 0); }
-        }
-    </style>
+    <script>
+        // Reveal Animations using Intersection Observer
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Floating CTA Visibility
+        const floatingCta = document.getElementById('floatingCta');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                floatingCta.classList.add('visible');
+            } else {
+                floatingCta.classList.remove('visible');
+            }
+        });
+    </script>
 
 </body>
 </html>
