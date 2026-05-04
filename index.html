@@ -603,11 +603,14 @@
                 padding: 1.2rem 1.5rem;
                 font-size: 1.1rem;
             }
-            .reveal-left {
-                transform: translateX(-15px);
+            .reveal, .reveal-left, .reveal-right {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: all 0.8s cubic-bezier(0.21, 0.47, 0.32, 0.98);
             }
-            .reveal-right {
-                transform: translateX(15px);
+            .reveal.active, .reveal-left.active, .reveal-right.active {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -948,7 +951,8 @@
     <script>
         // Reveal Animations using Intersection Observer
         const observerOptions = {
-            threshold: 0.1
+            threshold: 0.05,
+            rootMargin: '200px 0px 200px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
